@@ -26,9 +26,8 @@ def main(win):
     # Set up the game for the game view mode
     game = BlackJack()
 
-
     # Mode for view
-    state = {"mode": 'menu', 'point': 0, 'game': game.state}
+    state = {"mode": 'menu', 'point': 0, 'game': game.state, 'gameUpdateOutput': None}
 
     drawMenu(win, state, deck)
 
@@ -68,10 +67,17 @@ def main(win):
             elif state['mode'] == 'game':
                 if key == 'q':
                     state['mode'] = 'menu'
-                game.update(key)
+                    game.resetGame()
+                else:
+                    state["gameUpdateOutput"] = game.update(key)
+                    if state["gameUpdateOutput"] == 'menu':
+                        state['mode'] = 'menu'
                     
         except Exception as e:
             # No input   
+            if str(e) != 'no input':
+                win.addstr(35, 0, ' ' * 100)
+                win.addstr(35, 0, "ERROR: {0}".format(e))
             pass  
 
         # If an update the state is found, redraw the page
@@ -82,7 +88,9 @@ def main(win):
         win.clear() 
 
         # Helpful debug
-        # win.addstr(0, 0, "Key: " + str(key) + "  State: " + str(state))
+        # win.addstr(30, 0, "Key: " + str(key) + "\n  State: " + str(state))
+        # win.addstr(34, 0, "User: " + str(state['game']['user']))
+        # win.addstr(35, 0, "Computer: " + str(state['game']['comp']))
 
         # Print the menu
         if state["mode"] == 'menu':
@@ -94,17 +102,19 @@ def main(win):
 
 
 def drawMenu(win, state, deck):
-    win.addstr(2, 6, "Blackjack", curses.A_BOLD)
+    # Load logo
+    logo = open('logo.txt').read()
+    cPrint(win, logo, marginLeft=3)
 
     if state['point'] == 0: 
-        win.addstr(5, 7, " Play ", curses.color_pair(1))
+        win.addstr(9, 7, " Play ", curses.color_pair(1))
     else:
-        win.addstr(5, 7, " Play ")
+        win.addstr(9, 7, " Play ")
 
     if state['point'] == 1: 
-        win.addstr(7, 7, " Quit ", curses.color_pair(1))
+        win.addstr(11, 7, " Quit ", curses.color_pair(1))
     else:
-        win.addstr(7, 7, " Quit ")
+        win.addstr(11, 7, " Quit ")
 
     printCard(win, width-15, 5, deck.drawCard(infinite=False, random=True))
     printCard(win, width-30, 5, deck.drawCard(infinite=False, random=True))

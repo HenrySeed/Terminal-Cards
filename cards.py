@@ -11,22 +11,20 @@ def dim(str):
     return '\x1b[2m' + str + '\033[0m'
 
 class CardDeck():
-    def __init__(self, jokers=False, useColor=True):
+    def __init__(self, jokers=False, useColor=True, customCardVals=None):
+        self.customCardVals = customCardVals
         self.spades = []
         self.clubs = []
         self.diamonds = []
         self.hearts = []
         self.jokers = []
+        self.cardBack = ""
         self.cardHeight = 8
         self.cardWidth = 10
         self.useColor = useColor
 
         self.availableCards = []
-        for card in ['a','2','3','4','5','6','7','8','9','10','j','q','k']:
-            codes = []
-            for suit in ['s', 'c', 'h', 'd']:
-                self.availableCards.append(card + suit)
-        self.availableCards += ['jr', 'jb']
+        self.reset()
 
         count = 0
         tempStr = ""
@@ -56,7 +54,10 @@ class CardDeck():
                 if count == self.cardHeight:
                     count = 0
                     if len(aceCards) == 4:
-                        self.jokers.append(tempStr.strip())
+                        if len(self.jokers) == 2:
+                            self.cardBack = tempStr.strip()
+                        else:
+                            self.jokers.append(tempStr.strip())
                     else:
                         aceCards.append(tempStr.strip())
                     tempStr = ""
@@ -110,6 +111,22 @@ class CardDeck():
 
         return output
 
+    def getCardVal(self, code):
+        card = str(code[0:-1]).lower()
+        values = {
+            'a': 1,
+            'j': 11,
+            'q': 12,
+            'k': 13,
+        }
+        if self.customCardVals != None:
+            values = self.customCardVals
+
+        if card in ['a', 'j', 'q', 'k']:
+            return values[card]
+        else:
+            return int(card)
+
     def shuffle(self):
         shuffle(self.availableCards)
 
@@ -119,7 +136,8 @@ class CardDeck():
             codes = []
             for suit in ['s', 'c', 'h', 'd']:
                 self.availableCards.append(card + suit)
-        self.availableCards += ['jr', 'jb']
+        if self.jokers:
+            self.availableCards += ['jr', 'jb']
 
     def storeCards(self, codes):
         for code in codes:
