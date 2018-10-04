@@ -88,9 +88,9 @@ def main(win):
         win.clear() 
 
         # Helpful debug
-        win.addstr(30, 0, "Key: " + str(key) + "\n  State: " + str(state))
-        win.addstr(34, 0, "User: " + str(state['game']['user']))
-        win.addstr(35, 0, "Computer: " + str(state['game']['comp']))
+        # win.addstr(30, 0, "Key: " + str(key) + "\n  State: " + str(state))
+        # win.addstr(34, 0, "User: " + str(state['game']['user']))
+        # win.addstr(35, 0, "Computer: " + str(state['game']['comp']))
 
         # Print the menu
         if state["mode"] == 'menu':
@@ -109,7 +109,7 @@ def drawMenu(win, state, deck):
  | |_) | | __ _  ___| | ___  __ _  ___| | __
  |  _ <| |/ _` |/ __| |/ / |/ _` |/ __| |/ /
  | |_) | | (_| | (__|   <| | (_| | (__|   < 
- |____/|_|\__,_|\___|_|\_\ |\__,_|\___|_|\_\
+ |____/|_|\__,_|\___|_|\_\ |\__,_|\___|_|\\_\\
                         _/ |                
                        |__/   '''
 
