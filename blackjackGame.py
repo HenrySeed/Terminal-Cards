@@ -2,6 +2,7 @@ from cards import CardDeck
 import curses
 from utility import *
 from random import randint
+import time
 
 class BlackJack():
     def __init__(self):
@@ -87,7 +88,8 @@ class BlackJack():
                         self.state['user']['mode'] = 'stay'
 
         if self.state['user']['mode'] == 'stay' and self.state['comp']['mode'] == 'play':
-            self.compHit()
+            while self.state['comp']['mode'] == 'play':
+                self.compHit()
                         
       
         
@@ -162,7 +164,7 @@ class BlackJack():
             compScore = 21 - self.getHandVal(self.state['comp']['hand'])
             # Draw
             if userScore == compScore:
-                self.drawPopup(win, "You both had " + str(self.getHandVal(self.state['user']['hand'])))
+                self.drawPopup(win, "Draw, you both had " + str(self.getHandVal(self.state['user']['hand'])))
             # You Win
             if userScore < compScore:
                 self.drawPopup(win, "You Win, you were closer to 21")

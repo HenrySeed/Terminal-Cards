@@ -1,5 +1,5 @@
 from random import randint, shuffle 
-
+import os
 
 def blackOnRed(str):
     return '\x1b[30;41m' + str + '\033[0m'
@@ -30,7 +30,9 @@ class CardDeck():
         tempStr = ""
         cardCount = 0
         aceLines = []
-        for line in open('cards.txt').readlines():
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+
+        for line in open(dir_path+'/cards.txt').readlines():
             if cardCount >= 12:
                 aceLines.append(line)
             else:
