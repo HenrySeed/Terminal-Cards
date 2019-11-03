@@ -1,4 +1,4 @@
-# terminalCards
+# Terminal Cards
 Play card games in the terminal with this nifty python project
 
 Download with
